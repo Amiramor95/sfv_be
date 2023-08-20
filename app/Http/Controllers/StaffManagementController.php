@@ -946,4 +946,13 @@ class StaffManagementController extends Controller
 
         return response()->json(["message" => "Staff Management Details", 'list' => $users, "code" => 200]);
     }
+
+    public function getAllStaffManagement()
+    {
+        $users = DB::table('staff_management')
+            ->select('id', 'name')
+            ->where('status', '=', '1')
+            ->get();
+        return response()->json(["message" => "Staff Management List", 'list' => $users, "code" => 200]);
+    }
 }

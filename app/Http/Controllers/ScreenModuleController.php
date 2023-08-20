@@ -212,10 +212,7 @@ class ScreenModuleController extends Controller
             'module_id' => 'required|integer',
             'sub_module_id' => '',
             'screen_ids' => '',
-            'hospital_id' => 'required|integer',
-            'branch_id' => '',
-            'team_id' => '',
-            'staff_id' => 'required|integer',
+            'staff_id' => '',
             'type' => '',
         ]);
         if ($validator->fails()) return  response()->json(["message" => $validator->errors(), "code" => 422]);
@@ -227,9 +224,6 @@ class ScreenModuleController extends Controller
                     'module_id' => $request->module_id,
                     'sub_module_id' => $request->sub_module_id,
                     'screen_id' => $v,
-                    'hospital_id' => $request->hospital_id,
-                    'branch_id' => $request->branch_id,
-                    'team_id' => $request->team_id,
                     'staff_id' => $request->staff_id,
                     'access_screen' => '1',
                     'read_writes' => '1',
@@ -237,7 +231,6 @@ class ScreenModuleController extends Controller
                     'user_type' => $request->type,
 
                 ];
-
                 if (ScreenAccessRoles::where($screen)->count() == 0) {
                     $screen['added_by'] = $request->added_by;
                     ScreenAccessRoles::Create($screen);
@@ -250,9 +243,6 @@ class ScreenModuleController extends Controller
                     $screen = [
                         'module_id' => $request->module_id,
                         'screen_id' => $list[0]->id,
-                        'hospital_id' => $request->hospital_id,
-                        'branch_id' => $request->branch_id,
-                        'team_id' => $request->team_id,
                         'staff_id' => $request->staff_id,
                         'access_screen' => '1',
                         'read_writes' => '1',
@@ -262,8 +252,6 @@ class ScreenModuleController extends Controller
 
 
                     ];
-
-
                 ScreenAccessRoles::Create($screen);
                 return response()->json(["message" => "Roles has been assigned successfully!e", "code" => 200]);
             }
