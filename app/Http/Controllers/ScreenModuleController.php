@@ -328,7 +328,9 @@ class ScreenModuleController extends Controller
         if ($validator->fails()) {
             return response()->json(["message" => $validator->errors(), "code" => 422]);
         }
-        $module_name = ScreensModule::find($request->module_id)->get()->toArray();
+        $module_name = ScreensModule::where('id',$request->module_id)
+        ->select('module_name')
+        ->get();
         $sub_module_name = $request->sub_module_name;
         $sub_module_code = $request->sub_module_code;
         $chkPoint =  ScreenSubModule::where(function ($query) use ($sub_module_name, $sub_module_code) {
@@ -390,7 +392,7 @@ class ScreenModuleController extends Controller
             return response()->json(["message" => $validator->errors(), "code" => 422]);
         }
         $module_name = ScreensModule::find($request->module_id)->get()->toArray();
-        if($request->sub_module_name){
+        if($request->sub_module_id){
         $sub_module_name = ScreenSubModule::find($request->sub_module_id)->get()->toArray();
         }
 
