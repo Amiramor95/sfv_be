@@ -23,8 +23,13 @@ class RolesController extends Controller
 
     public function branch_view_list()
     {
-        $list= Roles::select('id', 'role_name', 'status')->where('role_name','!=','System Admin')->where('status','=','0')->orderBy('role_name','asc')->get();
-        return response()->json(["message" => "List.", 'list' => $list, "code" => 200]);
+        $list= Roles::select('id', 'role_name', 'status')->where('role_name','!=','System Admin')
+        ->where('status','=','0')->where('code','=',null)->orderBy('role_name','asc')->get();
+
+        $list2= Roles::select('id', 'role_name', 'status')->where('role_name','!=','System Admin')
+        ->where('status','=','0')->where('code','PEM')->get();
+        return response()->json(["message" => "List.", 'list' => $list, 'list2' => $list2,
+        "code" => 200]);
     }
 
     public function system_admin_role()
