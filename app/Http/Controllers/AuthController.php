@@ -36,7 +36,7 @@ class AuthController extends Controller
         DB::enableQueryLog();
         app('log')->debug($request->all());
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required|string|min:6',
         ]);
         if ($validator->fails()) {
@@ -265,7 +265,7 @@ class AuthController extends Controller
     {
         app('log')->debug($request->all());
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required|string|min:6',
         ]);
         if ($validator->fails()) {
