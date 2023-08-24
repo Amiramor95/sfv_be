@@ -51,6 +51,16 @@ class StaffManagementController extends Controller
 
     }
 
+    public function getUserListByEmail(Request $request){
+
+        $list=[];
+
+        $list=StaffManagement::select('name','id','email','status', 'nric_no', 'address_1', 'address_2', 'poscode', 'state', 'city', 'name_vacs_manufacturer', 'reg_num_vacs_manufacturer')
+        ->where('staff_management.email',$request->email)->get();
+        return response()->json(["message" => "Senarai Pengguna", 'list' => $list, "code" => 200]);
+    
+    }
+
     public function UserDetail(Request $request){
 
         $details=StaffManagement::select('*')
@@ -159,7 +169,71 @@ class StaffManagementController extends Controller
         return response()->json(["message" => "Staff already exists!", "code" => 200]);
     }
 
+    public function AdminAdd(Request $request){
 
+            $adminadd = [
+                'added_by' =>  $request->added_by,
+                'name' =>  $request->name,
+                'email' =>  $request->email,
+                'role_id' => $request->role_id,
+                'owner_type' => $request->owner_type,
+                'name_vacs_manufacturer' => $request->name_vacs_manufacturer,
+                'address_vacs_factory' => $request->address_vacs_factory,
+                'status' => "1"
+            ];
+
+        try {
+            $check = StaffManagement::where('email', $request->email)->count();
+
+            if ($check == 0) {
+                $staff = StaffManagement::create($adminadd);
+                $role = Roles::select('role_name')->where('id', $request->role_id)->first();
+
+                    $user = User::create(
+                        ['name' => $request->name, 'email' => $request->email, 'role' =>$role->role_name, 'password' => bcrypt($request->password),'id_user' => $request->id_user]
+                    );
+
+                    $defaultAcc = DB::table('default_role_access')
+                        ->select('default_role_access.id as role_id', 'screens.id as screen_id', 'screens.sub_module_id as sub_module_id', 'screens.module_id as module_id')
+                        ->join('screens', 'screens.id', '=', 'default_role_access.screen_id')
+                        ->where('default_role_access.role_id', $request->role_id)
+                        ->get();
+
+                    if ($defaultAcc) {
+                        foreach ($defaultAcc as $key) {
+                            $screen = [
+                                'module_id' => $key->module_id,
+                                'sub_module_id' => $key->sub_module_id,
+                                'screen_id' => $key->screen_id,
+                                'staff_id' => $user->id,
+                                'access_screen' => '1',
+                                'read_writes' => '1',
+                                'read_only' => '0',
+                            ];
+
+                            if (ScreenAccessRoles::where($screen)->count() == 0) {
+                                $screen['added_by'] = $request->added_by;
+                                ScreenAccessRoles::Create($screen);
+                            }
+                        }
+                    }
+                    $toEmail    =   $request->email;
+                    $data       =   ['name' => $request->name, 'user_id' => $toEmail, 'password' => $request->password];
+                    try {
+                        Mail::to($toEmail)->send(new StaffReceiveMail($data));
+                        return response()->json(["message" => "Record Created Successfully!", "code" => 200]);
+                    } catch (Exception $e) {
+                        return response()->json(["message" => $e->getMessage(), "code" => 500]);
+                    }
+                }
+
+                return response()->json(["message" => "Record Created Successfully!", "code" => 200]);
+            }
+         catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage(), 'Staff' => $adminadd, "code" => 200]);
+        }
+        return response()->json(["message" => "Staff already exists!", "code" => 200]);
+    }
 
     public function store(Request $request)
     {

@@ -360,9 +360,11 @@ Route::group(['prefix' => 'citizenship'], function () {
 Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/getStaffManagementListOrByEmail', [StaffManagementController::class, 'getStaffManagementListOrByEmail']);
     Route::post('/getUserListOrByEmail', [StaffManagementController::class, 'getUserListOrByEmail']);
+    Route::post('/getUserListByEmail', [StaffManagementController::class, 'getUserListByEmail']);
     Route::post('/UserDetail', [StaffManagementController::class, 'UserDetail']);
     Route::post('/UserRemove', [StaffManagementController::class, 'UserRemove']);
     Route::post('/UserAdd', [StaffManagementController::class, 'UserAdd']);
+    Route::post('/AdminAdd', [StaffManagementController::class, 'AdminAdd']);
     
     Route::post('/addstaff', [StaffManagementController::class, 'store']);
     Route::get('/getList', [StaffManagementController::class, 'getStaffManagementList']);
