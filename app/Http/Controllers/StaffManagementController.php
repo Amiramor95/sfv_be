@@ -32,7 +32,7 @@ class StaffManagementController extends Controller
         ->join('roles', 'staff_management.role_id', '=', 'roles.id')
         ->join('users', 'users.email', '=', 'staff_management.email')
         ->where('staff_management.role_id',$role['id'])->get()->toArray();
-  
+
         return response()->json(["message" => "Senarai Pentadbir", 'list' => $list, "code" => 200]);
 
     }
@@ -48,11 +48,11 @@ class StaffManagementController extends Controller
         ->leftjoin('users', 'users.email', '=', 'staff_management.email')
         ->where('staff_management.role_id','!=',$role['id'])->get()->toArray();
         return response()->json(["message" => "Senarai Pengguna", 'list' => $list, "code" => 200]);
-    
+
     }
 
     public function UserDetail(Request $request){
-    
+
         $details=StaffManagement::select('*')
         ->where('id',$request->id)
         ->get()->ToArray();
@@ -60,7 +60,7 @@ class StaffManagementController extends Controller
         return response()->json(["message" => "Senarai Pengguna", 'list' => $details, "code" => 200]);
     }
 
-    
+
     public function UserRemove(Request $request){
 
         $email=StaffManagement::select('email')->where('id', $request->id)->first();
@@ -92,7 +92,7 @@ class StaffManagementController extends Controller
                 'address_3' => $request->address_3,
                 'state' => $request->state,
                 'city'=> $request->city,
-                'postcode' => $request->postcode,
+                'poscode' => $request->poscode,
                 'email' =>  $request->email,
                 'role_id' => $request->role_id,
                 'contact_no' =>  $request->contact_no,
@@ -108,7 +108,7 @@ class StaffManagementController extends Controller
             if ($check == 0) {
                 $staff = StaffManagement::create($staffadd);
                 $role = Roles::select('role_name')->where('id', $request->role_id)->first();
- 
+
                     $default_pass =  SystemSetting::select('variable_value')
                     ->where('variable_name', "=", 'set-the-default-password-value')
                     ->first();
@@ -1094,5 +1094,5 @@ class StaffManagementController extends Controller
     }
 
 
-    
+
 }
