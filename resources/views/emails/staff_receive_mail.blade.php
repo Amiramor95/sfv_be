@@ -14,21 +14,21 @@
                     <div class="max-w-md w-full space-y-8">
                         Hi {{ $data['name']}},
                         <br>
-                        Your account has been created successfully. 
+                        Akaun anda telah berjaya dicipta. 
                         <br>
                         <br>
-                        Your Login UserId is- {{ $data['user_id']}}
+                        ID Pengguna Anda adalah {{ $data['user_id']}}
                         <br>
                         <br>
-                        Your Login Password is- {{ $data['password']}}
+                        Kata Laluan Anda adalah {{ $data['password']}}
                         <br>
                         <br>
-                        Thanks,
+                        Terima Kasih,
                         <br>
-                        Team Mentari.
+                        Sistem Farmakovigilan Veterinar.
                         <br>
                         <br>
-                        <div style="color: grey"><small>This is an auto-generated email. Please do not reply to this email.</small></div>
+                        <div style="color: grey"><small>Emel ini di jana secara automatik. Sila Jangan Membalas emel ini.</small></div>
                     </div>
                 </div>
             </div>
