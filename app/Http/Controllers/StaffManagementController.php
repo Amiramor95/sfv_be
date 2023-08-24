@@ -58,13 +58,14 @@ class StaffManagementController extends Controller
         $list=StaffManagement::select('name','id','email','status', 'nric_no', 'address_1', 'address_2', 'poscode', 'state', 'city', 'name_vacs_manufacturer', 'reg_num_vacs_manufacturer')
         ->where('staff_management.email',$request->email)->get();
         return response()->json(["message" => "Senarai Pengguna", 'list' => $list, "code" => 200]);
-    
+
     }
 
     public function UserDetail(Request $request){
 
         $details=StaffManagement::select('*')
-        ->where('id',$request->id)
+        ->where('staff_management.id',$request->id)
+        ->join('state', 'state.id', '=', 'staff_management.state')
         ->get()->ToArray();
 
         return response()->json(["message" => "Senarai Pengguna", 'list' => $details, "code" => 200]);
