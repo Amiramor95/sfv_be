@@ -71,8 +71,93 @@ class StaffManagementController extends Controller
         return response()->json(["message" => "Pengguna Telah Berjaya Dipadamkan",  "code" => 200]);
     }
 
+    public function UserAdd(Request $request){
+        $randomNumber=0;
+        $count=0;
+        $count2=1;
+        while($count<$count2){
+        $randomNumber = random_int(100000, 999999);
+        $check= User::where('id_user',$randomNumber)->first();
+        if(!$check){
+            $count++;
+        }
+    }
 
+            $staffadd = [
+                'added_by' =>  $request->added_by,
+                'name' =>  $request->name,
+                'nric_no' =>  $request->nric_no,
+                'address_1' => $request->address_1,
+                'address_2' => $request->address_2,
+                'address_3' => $request->address_3,
+                'state' => $request->state,
+                'city'=> $request->city,
+                'postcode' => $request->postcode,
+                'email' =>  $request->email,
+                'role_id' => $request->role_id,
+                'contact_no' =>  $request->contact_no,
+                'owner_type' => $request->owner_type,
+                'name_vacs_manufacturer' => $request->name_vacs_manufacturer,
+                'address_vacs_factory' => $request->address_vacs_factory,
+                'status' => "1"
+            ];
 
+        try {
+            $check = StaffManagement::where('email', $request->email)->count();
+
+            if ($check == 0) {
+                $staff = StaffManagement::create($staffadd);
+                $role = Roles::select('role_name')->where('id', $request->role_id)->first();
+ 
+                    $default_pass =  SystemSetting::select('variable_value')
+                    ->where('variable_name', "=", 'set-the-default-password-value')
+                    ->first();
+
+                    $user = User::create(
+                        ['name' => $request->name, 'email' => $request->email, 'role' =>$role->role_name, 'password' => bcrypt($default_pass->variable_value),'id_user' => $randomNumber]
+                    );
+
+                    $defaultAcc = DB::table('default_role_access')
+                        ->select('default_role_access.id as role_id', 'screens.id as screen_id', 'screens.sub_module_id as sub_module_id', 'screens.module_id as module_id')
+                        ->join('screens', 'screens.id', '=', 'default_role_access.screen_id')
+                        ->where('default_role_access.role_id', $request->role_id)
+                        ->get();
+
+                    if ($defaultAcc) {
+                        foreach ($defaultAcc as $key) {
+                            $screen = [
+                                'module_id' => $key->module_id,
+                                'sub_module_id' => $key->sub_module_id,
+                                'screen_id' => $key->screen_id,
+                                'staff_id' => $user->id,
+                                'access_screen' => '1',
+                                'read_writes' => '1',
+                                'read_only' => '0',
+                            ];
+
+                            if (ScreenAccessRoles::where($screen)->count() == 0) {
+                                $screen['added_by'] = $request->added_by;
+                                ScreenAccessRoles::Create($screen);
+                            }
+                        }
+                    }
+                    $toEmail    =   $request->email;
+                    $data       =   ['name' => $request->name, 'user_id' => $toEmail, 'password' => $default_pass->variable_value];
+                    try {
+                        Mail::to($toEmail)->send(new StaffReceiveMail($data));
+                        return response()->json(["message" => "Record Created Successfully!", "code" => 200]);
+                    } catch (Exception $e) {
+                        return response()->json(["message" => $e->getMessage(), "code" => 500]);
+                    }
+                }
+
+                return response()->json(["message" => "Record Created Successfully!", "code" => 200]);
+            }
+         catch (Exception $e) {
+            return response()->json(["message" => $e->getMessage(), 'Staff' => $staffadd, "code" => 200]);
+        }
+        return response()->json(["message" => "Staff already exists!", "code" => 200]);
+    }
 
 
 
