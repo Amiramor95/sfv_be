@@ -358,6 +358,10 @@ Route::group(['prefix' => 'citizenship'], function () {
     Route::post('/update', [CitizenshipController::class, 'update']);
 });
 Route::group(['prefix' => 'staff-management'], function () {
+    Route::post('/getStaffManagementListOrByEmail', [StaffManagementController::class, 'getStaffManagementListOrByEmail']);
+    Route::post('/getUserListOrByEmail', [StaffManagementController::class, 'getUserListOrByEmail']);
+    Route::post('/UserDetail', [StaffManagementController::class, 'UserDetail']);
+    
     Route::post('/addstaff', [StaffManagementController::class, 'store']);
     Route::get('/getList', [StaffManagementController::class, 'getStaffManagementList']);
     Route::get('/getListByBranchId/{branch_id}', [StaffManagementController::class, 'getStaffManagementListByBranchId']);
@@ -383,8 +387,6 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/getStaffDetailByBranch', [StaffManagementController::class, 'getStaffDetailByBranch']);
     Route::post('/getStaffDetailByRole', [StaffManagementController::class, 'getStaffDetailByRole']);
     Route::post('/getAllStaff', [StaffManagementController::class, 'getAllStaffManagement']);
-    Route::post('/getStaffManagementListOrByEmail', [StaffManagementController::class, 'getStaffManagementListOrByEmail']);
-    Route::post('/getUserListOrByEmail', [StaffManagementController::class, 'getUserListOrByEmail']);
     
 });
 

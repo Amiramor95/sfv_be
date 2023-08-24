@@ -985,5 +985,16 @@ class StaffManagementController extends Controller
     
     }
 
+    public function UserDetail(Request $request){
+    
+        $details=StaffManagement::select('*')
+        ->where('id',$request->id)
+        ->get()->ToArray();
+
+        return response()->json(["message" => "Senarai Pengguna", 'list' => $details, "code" => 200]);
+    }
+
+
+
     
 }
