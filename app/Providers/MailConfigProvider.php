@@ -36,7 +36,7 @@ class MailConfigProvider extends ServiceProvider
                 'username'   =>     $configuration['login_user_id'],
                 'password'   =>     $configuration['login_password'],
                 'encryption' =>     $configuration['security'],
-                'from'       =>     array('address' => $configuration['send_email_from'], 'name' => 'Mentari'),
+                'from'       =>     array('address' => $configuration['send_email_from'], 'name' => 'Araken'),
             );
             Config::set('mail', $config);
         }
