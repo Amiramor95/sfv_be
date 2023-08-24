@@ -384,6 +384,8 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/getStaffDetailByRole', [StaffManagementController::class, 'getStaffDetailByRole']);
     Route::post('/getAllStaff', [StaffManagementController::class, 'getAllStaffManagement']);
     Route::post('/getStaffManagementListOrByEmail', [StaffManagementController::class, 'getStaffManagementListOrByEmail']);
+    Route::post('/getUserListOrByEmail', [StaffManagementController::class, 'getUserListOrByEmail']);
+    
 });
 
 Route::group(['prefix' => 'calendar-management'], function () {
