@@ -24,6 +24,58 @@ use App\Models\HospitalBranchManagement;
 
 class StaffManagementController extends Controller
 {
+    public function getStaffManagementListOrByEmail(Request $request){
+        $list=[];
+
+        $role= Roles::select('id')->where('role_name','Admin Pentadbir')->first();
+        $list=StaffManagement::select('staff_management.name','staff_management.id','roles.role_name','staff_management.email','staff_management.status','users.id_user')
+        ->join('roles', 'staff_management.role_id', '=', 'roles.id')
+        ->join('users', 'users.email', '=', 'staff_management.email')
+        ->where('staff_management.role_id',$role['id'])->get()->toArray();
+  
+        return response()->json(["message" => "Senarai Pentadbir", 'list' => $list, "code" => 200]);
+
+    }
+
+    public function getUserListOrByEmail(Request $request){
+
+        $list=[];
+
+        $role= Roles::select('id')->where('role_name','Admin Pentadbir')->first();
+
+        $list=StaffManagement::select('staff_management.name','staff_management.id','roles.role_name','staff_management.email','staff_management.status','users.id_user')
+        ->leftjoin('roles', 'roles.id','staff_management.role_id')
+        ->leftjoin('users', 'users.email', '=', 'staff_management.email')
+        ->where('staff_management.role_id','!=',$role['id'])->get()->toArray();
+        return response()->json(["message" => "Senarai Pengguna", 'list' => $list, "code" => 200]);
+    
+    }
+
+    public function UserDetail(Request $request){
+    
+        $details=StaffManagement::select('*')
+        ->where('id',$request->id)
+        ->get()->ToArray();
+
+        return response()->json(["message" => "Senarai Pengguna", 'list' => $details, "code" => 200]);
+    }
+
+    
+    public function UserRemove(Request $request){
+
+        $email=StaffManagement::select('email')->where('id', $request->id)->first();
+        $remove=User::where('email', $email['email'])->delete();
+        $remove2=StaffManagement::where('id', $request->id)->delete();
+// nanti tambah query delete untuk form register vaksin
+
+        return response()->json(["message" => "Pengguna Telah Berjaya Dipadamkan",  "code" => 200]);
+    }
+
+
+
+
+
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -955,45 +1007,6 @@ class StaffManagementController extends Controller
             ->get();
         return response()->json(["message" => "Staff Management List", 'list' => $users, "code" => 200]);
     }
-
-
-    public function getStaffManagementListOrByEmail(Request $request){
-
-        $list=[];
-
-        $role= Roles::select('id')->where('role_name','Admin Pentadbir')->first();
-        $list=StaffManagement::select('staff_management.name','staff_management.id','roles.role_name','staff_management.email','staff_management.status','users.id_user')
-        ->join('roles', 'staff_management.role_id', '=', 'roles.id')
-        ->join('users', 'users.email', '=', 'staff_management.email')
-        ->where('staff_management.role_id',$role['id'])->get()->toArray();
-  
-        return response()->json(["message" => "Senarai Pentadbir", 'list' => $list, "code" => 200]);
-
-    }
-
-    public function getUserListOrByEmail(Request $request){
-
-        $list=[];
-
-        $role= Roles::select('id')->where('role_name','Admin Pentadbir')->first();
-
-        $list=StaffManagement::select('staff_management.name','staff_management.id','roles.role_name','staff_management.email','staff_management.status','users.id_user')
-        ->leftjoin('roles', 'roles.id','staff_management.role_id')
-        ->leftjoin('users', 'users.email', '=', 'staff_management.email')
-        ->where('staff_management.role_id','!=',$role['id'])->get()->toArray();
-        return response()->json(["message" => "Senarai Pengguna", 'list' => $list, "code" => 200]);
-    
-    }
-
-    public function UserDetail(Request $request){
-    
-        $details=StaffManagement::select('*')
-        ->where('id',$request->id)
-        ->get()->ToArray();
-
-        return response()->json(["message" => "Senarai Pengguna", 'list' => $details, "code" => 200]);
-    }
-
 
 
     

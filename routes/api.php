@@ -361,6 +361,7 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/getStaffManagementListOrByEmail', [StaffManagementController::class, 'getStaffManagementListOrByEmail']);
     Route::post('/getUserListOrByEmail', [StaffManagementController::class, 'getUserListOrByEmail']);
     Route::post('/UserDetail', [StaffManagementController::class, 'UserDetail']);
+    Route::post('/UserRemove', [StaffManagementController::class, 'UserRemove']);
     
     Route::post('/addstaff', [StaffManagementController::class, 'store']);
     Route::get('/getList', [StaffManagementController::class, 'getStaffManagementList']);
