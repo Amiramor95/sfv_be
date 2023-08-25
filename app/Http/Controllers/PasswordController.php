@@ -21,7 +21,7 @@ class PasswordController extends Controller
         }
         $encyptUserId = $request->userid;
         $password = $request->password;
-
+dd($validator);
         try {
             $user_id = Crypt::decryptString($encyptUserId);
             User::where('id', $user_id)->update(['password' => bcrypt($password)]);
