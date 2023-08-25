@@ -27,11 +27,12 @@ class StaffManagementController extends Controller
     public function getStaffManagementListOrByEmail(Request $request){
         $list=[];
 
-        $role= Roles::select('id')->where('role_name','Admin Pentadbir')->first();
+        $role= Roles::select('id')->where('role_name','Pemohon')->first();
+
         $list=StaffManagement::select('staff_management.name','staff_management.id','roles.role_name','staff_management.email','staff_management.status','users.id_user')
         ->join('roles', 'staff_management.role_id', '=', 'roles.id')
         ->join('users', 'users.email', '=', 'staff_management.email')
-        ->where('staff_management.role_id',$role['id'])->get()->toArray();
+        ->where('staff_management.role_id', '!=', $role['id'])->get()->toArray();
 
         return response()->json(["message" => "Senarai Pentadbir", 'list' => $list, "code" => 200]);
 
