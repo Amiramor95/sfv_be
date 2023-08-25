@@ -365,6 +365,8 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/UserRemove', [StaffManagementController::class, 'UserRemove']);
     Route::post('/UserAdd', [StaffManagementController::class, 'UserAdd']);
     Route::post('/AdminAdd', [StaffManagementController::class, 'AdminAdd']);
+    Route::post('/getDetailsById', [StaffManagementController::class, 'getAdminDetailsbyId']);
+    Route::post('/AdminUpdate', [StaffManagementController::class, 'AdminUpdate']);
     
     Route::post('/addstaff', [StaffManagementController::class, 'store']);
     Route::get('/getList', [StaffManagementController::class, 'getStaffManagementList']);
@@ -372,7 +374,6 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::get('/getPsychiatrist/{branch_id}', [StaffManagementController::class, 'getPsychiatristByBranchId']);
 
     Route::post('/getListById', [StaffManagementController::class, 'getStaffManagementListById']);
-    Route::post('/getDetailsById', [StaffManagementController::class, 'getStaffManagementDetailsById']);
     Route::post('/editDetailsById', [StaffManagementController::class, 'editStaffManagementDetailsById']);
     Route::post('/update', [StaffManagementController::class, 'updateStaffManagement']);
     Route::post('/remove', [StaffManagementController::class, 'remove']);

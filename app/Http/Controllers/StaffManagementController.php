@@ -237,6 +237,62 @@ class StaffManagementController extends Controller
         return response()->json(["message" => "Staff already exists!", "code" => 200]);
     }
 
+    public function AdminUpdate(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'role_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(["message" => $validator->errors(), "code" => 422]);
+        }
+
+        StaffManagement::where(
+            ['id' => $request->id]
+        )->update([
+            'role_id' =>  $request->role_id
+        ]);
+
+        $role = Roles::select('role_name')->where('id', $request->role_id)->get();
+
+
+        User::where(['email' => $request->email])
+            ->update(['role' => $role[0]->role_name]);
+
+        $getstaffid = User::where('email', $request->email)
+                            ->select('id')
+                            ->get();
+
+        ScreenAccessRoles::where('staff_id', $getstaffid[0]->id)->delete();
+
+        $defaultAcc = DB::table('default_role_access')
+        ->select('default_role_access.id as role_id', 'screens.id as screen_id', 'screens.sub_module_id as sub_module_id', 'screens.module_id as module_id')
+        ->join('screens', 'screens.id', '=', 'default_role_access.screen_id')
+        ->where('default_role_access.role_id', $request->role_id)
+        ->get();
+
+        if ($defaultAcc) {
+            foreach ($defaultAcc as $key) {
+                $screen = [
+                    'module_id' => $key->module_id,
+                    'sub_module_id' => $key->sub_module_id,
+                    'screen_id' => $key->screen_id,
+                    'staff_id' => $getstaffid[0]->id,
+                    'access_screen' => '1',
+                    'read_writes' => '1',
+                    'read_only' => '0',
+                ];
+
+                if (ScreenAccessRoles::where($screen)->count() == 0) {
+                    $screen['added_by'] = $request->added_by;
+                    ScreenAccessRoles::Create($screen);
+                }
+            }
+            return response()->json(["message" => "Record Updated Successfully!", "code" => 200]);
+        }
+
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -652,6 +708,24 @@ class StaffManagementController extends Controller
 
             // dd($users);
         return response()->json(["message" => "Staff Management List", 'list' => $users, "code" => 200]);
+    }
+
+    public function getAdminDetailsbyId(Request $request){
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(["message" => $validator->errors(), "code" => 422]);
+        }
+
+        $user = DB::table('staff_management')
+                    ->join('users', 'users.email', '=', 'staff_management.email')
+                    ->select('*')
+                    ->where('staff_management.id', $request->id)
+                    ->get();
+        
+        return response()->json(["message" => "Staff Management List", 'list' => $user, "code" => 200]);
+
     }
 
     public function getStaffManagementDetailsById(Request $request)
