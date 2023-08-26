@@ -95,6 +95,7 @@ use App\Http\Controllers\DefaultRoleAccessController;
 use App\Http\Controllers\UserBlockController;
 use App\Http\Controllers\FaqListController;
 use App\Http\Controllers\FaqCategoryController;
+use App\Http\Controllers\VaccineRegController;
 use App\Models\DefaultRoleAccess;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Mail;
@@ -399,6 +400,16 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/getAllStaff', [StaffManagementController::class, 'getAllStaffManagement']);
 
 });
+
+Route::group(['prefix' => 'vaccine-registration'], function () {
+    Route::post('/regDraft', [VaccineRegController::class, 'regDraft']);
+    Route::post('/regSave', [VaccineRegController::class, 'regSave']);
+    Route::post('/draftRegDraft', [VaccineRegController::class, 'draftRegDraft']);
+    Route::post('/draftRegSave', [VaccineRegController::class, 'draftRegSave']);
+    Route::post('/applicationList', [VaccineRegController::class, 'applicationList']);
+    Route::post('/getVacInfoList', [VaccineRegController::class, 'getVacInfoList']);
+}
+);
 
 Route::group(['prefix' => 'calendar-management'], function () {
     Route::post('/add', [CalendarExceptionController::class, 'addexception']);
