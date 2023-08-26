@@ -874,6 +874,7 @@ Route::group(['prefix' => 'systemadmin'], function () {
 Route::group(['prefix' => 'all-mentari-staff'], function () {
 
     Route::get('/get', [DashboardController::class, 'getallmentaristaff']);
+    Route::post('/post', [DashboardController::class, 'sfvdashboard']);
 });
 
 Route::group(['prefix' => 'user-admin-clerk'], function () {
