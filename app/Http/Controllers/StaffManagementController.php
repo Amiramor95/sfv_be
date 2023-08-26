@@ -72,6 +72,15 @@ class StaffManagementController extends Controller
         return response()->json(["message" => "Senarai Pengguna", 'list' => $details, "code" => 200]);
     }
 
+    public function UserProfile(Request $request){
+        $details=User::select('users.id_user','users.name','users.email','staff_management.contact_no')
+        ->leftjoin('staff_management','staff_management.email','=','users.email')
+        ->where('users.email',$request->email)
+        ->get()->ToArray();
+
+        return response()->json(["message" => "Profil Pengguna", 'list' => $details, "code" => 200]);
+    }
+
 
     public function UserRemove(Request $request){
 
@@ -345,6 +354,42 @@ class StaffManagementController extends Controller
         ->get();
         return response()->json(["message" => "Senarai Saringan", 'list' => $list, "code" => 200]);
     }
+
+
+    public function UserUpdateProfile(Request $request){
+    $userid = User::select('id')->where('email',$request->email_old)->first();
+    $staffid = StaffManagement::select('id')->where('email',$request->email_old)->first();
+
+            $useradd = [
+                'name' =>  $request->name,
+                'email' =>  $request->email,
+                'id_user' =>  $request->id_user,
+            ];
+            User::where(
+                ['id' => $userid['id']]
+            )->update($useradd);
+
+            $staffadd = [
+                'name' =>  $request->name,
+                'email' =>  $request->email,
+                'contact_no' =>  $request->contact_no,
+            ];
+            StaffManagement::where(
+                    ['id' => $staffid['id']]
+                )->update($staffadd);
+            
+
+        return response()->json(["message" => "Staff updated successfully", "code" => 200]);
+    }
+
+
+
+
+
+
+
+
+
 
     public function store(Request $request)
     {
