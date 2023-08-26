@@ -117,6 +117,10 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
 });
+
+Route::group(['middleware' => 'api', 'prefix' => 'screening'], function ($router) {
+    Route::post('/GetScreeningList', [staffManagementController::class, 'GetScreeningList']);
+});
 Route::group(['prefix' => 'pass'], function () {
     Route::post('/forgetpass', [ForgetpasswordController::class, 'forgetpass']);
     Route::post('/validatePasswordRule', [PasswordController::class, 'passwordRule']);
