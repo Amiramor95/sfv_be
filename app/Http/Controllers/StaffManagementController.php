@@ -355,6 +355,16 @@ class StaffManagementController extends Controller
         return response()->json(["message" => "Senarai Saringan", 'list' => $list, "code" => 200]);
     }
 
+    public function GetPenilaianList(Request $request)
+    {
+        $list=DB::table('vaccine_reg')->select('vaccine_reg.id','vaccine_reg.created_at','admin_info.vac_name','users.name','vaccine_reg.updated_at','vaccine_reg.status')
+        ->leftjoin('users', 'users.id', '=', 'vaccine_reg.staff_id')
+        ->leftjoin('admin_info', 'admin_info.id', '=', 'vaccine_reg.admin_info_id')
+        ->where('vaccine_reg.status','2')
+        ->get();
+        return response()->json(["message" => "Senarai Penilaian", 'list' => $list, "code" => 200]);
+    }
+
 
     public function UserUpdateProfile(Request $request){
     $userid = User::select('id')->where('email',$request->email_old)->first();
@@ -377,7 +387,7 @@ class StaffManagementController extends Controller
             StaffManagement::where(
                     ['id' => $staffid['id']]
                 )->update($staffadd);
-            
+
 
         return response()->json(["message" => "Staff updated successfully", "code" => 200]);
     }
