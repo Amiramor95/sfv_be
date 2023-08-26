@@ -121,6 +121,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 Route::group(['middleware' => 'api', 'prefix' => 'screening'], function ($router) {
     Route::post('/GetScreeningList', [staffManagementController::class, 'GetScreeningList']);
+    Route::post('/GetPenilaianList', [StaffManagementController::class, 'GetPenilaianList']);
+
 });
 Route::group(['prefix' => 'pass'], function () {
     Route::post('/forgetpass', [ForgetpasswordController::class, 'forgetpass']);
@@ -412,6 +414,8 @@ Route::group(['prefix' => 'vaccine-registration'], function () {
     Route::post('/getVacInfoList', [VaccineRegController::class, 'getVacInfoList']);
     Route::post('/ReturnReg', [VaccineRegController::class, 'ReturnReg']);
     Route::post('/KeSaringanReg', [VaccineRegController::class, 'KeSaringanReg']);
+    Route::post('/ResultPass', [VaccineRegController::class, 'ResultPass']);
+    Route::post('/ResultDecline', [VaccineRegController::class, 'ResultDecline']);
 
 }
 );

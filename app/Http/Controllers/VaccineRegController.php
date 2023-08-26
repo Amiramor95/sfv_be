@@ -95,7 +95,7 @@ class VaccineRegController extends Controller
     }
 
     public function draftRegDraft(Request $request){
-        
+
         $vaccine_reg = VaccineRegistration::select('*')
         ->where('id',$request->id)
         ->get();
@@ -151,7 +151,7 @@ class VaccineRegController extends Controller
 
 
 
-    
+
     public function ReturnReg(Request $request){
 
         $vaccineregadd = [
@@ -163,7 +163,7 @@ class VaccineRegController extends Controller
         return response()->json(["message" => "Berjaya Dikembalikan", "code" => 200]);
     }
 
-    
+
     public function KeSaringanReg(Request $request){
 
         $vaccineregadd = [
@@ -174,5 +174,29 @@ class VaccineRegController extends Controller
 
 
         return response()->json(["message" => "Berjaya  Ke Penilaian", "code" => 200]);
+    }
+
+    public function ResultPass(Request $request){
+
+        $vaccineregadd = [
+            'status' => '3' //3 indicates Pass
+        ];
+
+        $vaccine_reg = VaccineRegistration::where('id', $request->id)->update($vaccineregadd);
+
+
+        return response()->json(["message" => "Status Permohonan adalah lulus", "code" => 200]);
+    }
+
+    public function ResultDecline(Request $request){
+
+        $vaccineregadd = [
+            'status' => '5' // 5 indicates Decline
+        ];
+
+        $vaccine_reg = VaccineRegistration::where('id', $request->id)->update($vaccineregadd);
+
+
+        return response()->json(["message" => "Status Permohonan adalah ditolak", "code" => 200]);
     }
 }
