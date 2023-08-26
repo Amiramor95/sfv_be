@@ -368,10 +368,11 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/UserDetail', [StaffManagementController::class, 'UserDetail']);
     Route::post('/UserRemove', [StaffManagementController::class, 'UserRemove']);
     Route::post('/UserAdd', [StaffManagementController::class, 'UserAdd']);
+    Route::post('/UserUpdate', [StaffManagementController::class, 'UserUpdate']);
     Route::post('/AdminAdd', [StaffManagementController::class, 'AdminAdd']);
     Route::post('/getDetailsById', [StaffManagementController::class, 'getAdminDetailsbyId']);
     Route::post('/AdminUpdate', [StaffManagementController::class, 'AdminUpdate']);
-    
+
     Route::post('/addstaff', [StaffManagementController::class, 'store']);
     Route::get('/getList', [StaffManagementController::class, 'getStaffManagementList']);
     Route::get('/getListByBranchId/{branch_id}', [StaffManagementController::class, 'getStaffManagementListByBranchId']);
@@ -396,7 +397,7 @@ Route::group(['prefix' => 'staff-management'], function () {
     Route::post('/getStaffDetailByBranch', [StaffManagementController::class, 'getStaffDetailByBranch']);
     Route::post('/getStaffDetailByRole', [StaffManagementController::class, 'getStaffDetailByRole']);
     Route::post('/getAllStaff', [StaffManagementController::class, 'getAllStaffManagement']);
-    
+
 });
 
 Route::group(['prefix' => 'calendar-management'], function () {
