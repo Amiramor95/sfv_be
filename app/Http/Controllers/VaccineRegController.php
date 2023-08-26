@@ -179,8 +179,8 @@ class VaccineRegController extends Controller
     public function ResultPass(Request $request){
 
         $vaccineregadd = [
-            'status' => '3' //3 indicates Pass
-        ];
+            'status' => '3', //3 indicates Pass
+            'comment' => $request->comment,        ];
 
         $vaccine_reg = VaccineRegistration::where('id', $request->id)->update($vaccineregadd);
 
@@ -191,7 +191,8 @@ class VaccineRegController extends Controller
     public function ResultDecline(Request $request){
 
         $vaccineregadd = [
-            'status' => '5' // 5 indicates Decline
+            'status' => '5', // 5 indicates Decline
+            'comment' => $request->comment,
         ];
 
         $vaccine_reg = VaccineRegistration::where('id', $request->id)->update($vaccineregadd);
