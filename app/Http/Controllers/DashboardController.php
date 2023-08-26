@@ -50,7 +50,7 @@ use App\Models\ExternalReferralForm;
 use App\Models\Occt_Referral_Form;
 use App\Models\PsychologyReferral;
 use App\Models\RehabReferralAndClinicalForm;
-
+use App\Models\VaccineRegistration;
 
 use App\Models\Year;
 use DateTime;
@@ -62,6 +62,20 @@ use App\Models\ScreenPageModule;
 class DashboardController extends Controller
 {
     //
+
+    public function  sfvdashboard(Request $request)
+    {
+
+    // $permohonan= DB::table('vaccine_reg')->count();
+     $permohonan = VaccineRegistration::where('status','!=','0')->count();
+     $pengguna = User::where('role','Pemohon')->count();
+     $penyemak = User::where('role','Penyemak')->count();
+     $pentadbir = User::where('role','Admin Pentadbir')->count();
+
+
+     return response()->json(["message" => "dashboard", 'permohonan' => $permohonan, 'pengguna'=>$pengguna, 'penyemak'=>$penyemak, 'pentadbir'=>$pentadbir, "code" => 200]);
+    }
+
     public function getsystemadmin(Request $request)
     {
         $users = DB::table('patient_appointment_details')
