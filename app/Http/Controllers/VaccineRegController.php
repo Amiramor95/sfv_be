@@ -148,4 +148,31 @@ class VaccineRegController extends Controller
         return response()->json(["message" => "Berjaya dihantar", "code" => 200]);
 
     }
+
+
+
+    
+    public function ReturnReg(Request $request){
+
+        $vaccineregadd = [
+            'status' => '4' // 4 indicates Return
+        ];
+
+        $vaccine_reg = VaccineRegistration::where('id', $request->id)->update($vaccineregadd);
+
+        return response()->json(["message" => "Berjaya Dikembalikan", "code" => 200]);
+    }
+
+    
+    public function KeSaringanReg(Request $request){
+
+        $vaccineregadd = [
+            'status' => '2' // 0 indicates Next phase (Penilaian)
+        ];
+
+        $vaccine_reg = VaccineRegistration::where('id', $request->id)->update($vaccineregadd);
+
+
+        return response()->json(["message" => "Berjaya  Ke Penilaian", "code" => 200]);
+    }
 }

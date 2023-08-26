@@ -410,6 +410,9 @@ Route::group(['prefix' => 'vaccine-registration'], function () {
     Route::post('/draftRegSave', [VaccineRegController::class, 'draftRegSave']);
     Route::post('/applicationList', [VaccineRegController::class, 'applicationList']);
     Route::post('/getVacInfoList', [VaccineRegController::class, 'getVacInfoList']);
+    Route::post('/ReturnReg', [VaccineRegController::class, 'ReturnReg']);
+    Route::post('/KeSaringanReg', [VaccineRegController::class, 'KeSaringanReg']);
+
 }
 );
 
