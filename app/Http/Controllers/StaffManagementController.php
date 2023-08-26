@@ -171,6 +171,49 @@ class StaffManagementController extends Controller
         return response()->json(["message" => "Staff already exists!", "code" => 200]);
     }
 
+    public function UserUpdate(Request $request){
+        $staffEmail = StaffManagement::where(
+            ['id' => $request->id]
+        )
+            ->select('email')
+            ->first();
+
+            $staffadd = [
+                'added_by' =>  $request->added_by,
+                'name' =>  $request->name,
+                'nric_no' =>  $request->nric_no,
+                'address_1' => $request->address_1,
+                'address_2' => $request->address_2,
+                'address_3' => $request->address_3,
+                'state' => $request->state,
+                'city'=> $request->city,
+                'poscode' => $request->poscode,
+                'email' =>  $request->email,
+                'role_id' => $request->role_id,
+                'contact_no' =>  $request->contact_no,
+                'owner_type' => $request->owner_type,
+                'name_vacs_manufacturer' => $request->name_vacs_manufacturer,
+                'address_vacs_factory' => $request->address_vacs_factory,
+                'status' => "1"
+            ];
+            // dd($staffadd);
+
+            if($request->id) {
+                StaffManagement::where(
+                    ['id' => $request->id]
+                )->update($staffadd);
+            }
+            $updateDetails = [
+                'email' => $request->email,
+                'name' => $request->name,
+            ];
+            DB::table('users')
+                ->where('email', $staffEmail->email)
+                ->update($updateDetails);
+
+        return response()->json(["message" => "Staff updated successfully", "code" => 200]);
+    }
+
     public function AdminAdd(Request $request){
 
             $adminadd = [
@@ -238,7 +281,7 @@ class StaffManagementController extends Controller
     }
 
     public function AdminUpdate(Request $request){
-        
+
         $validator = Validator::make($request->all(), [
             'role_id' => 'required',
         ]);
@@ -733,7 +776,7 @@ class StaffManagementController extends Controller
                     ->select('*')
                     ->where('staff_management.id', $request->id)
                     ->get();
-        
+
         return response()->json(["message" => "Staff Management List", 'list' => $user, "code" => 200]);
 
     }
